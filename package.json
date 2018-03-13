@@ -1,6 +1,6 @@
 {
   "name": "dnssd",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Bonjour/Avahi-like service discovery in pure JavaScript",
   "keywords": [
     "bonjour",

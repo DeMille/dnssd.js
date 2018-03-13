@@ -1,16 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-var _promise = require('babel-runtime/core-js/promise');
-
-var _promise2 = _interopRequireDefault(_promise);
-
-var _isInteger = require('babel-runtime/core-js/number/is-integer');
-
-var _isInteger2 = _interopRequireDefault(_isInteger);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 var dnssd = require('../index.js');
 
 //
@@ -133,7 +123,7 @@ function advertise(type, portString, name, obj) {
       advertisement = void 0;
 
   if (!port) exit('Missing port number');
-  if (!(0, _isInteger2.default)(port)) exit('Bad port number');
+  if (!Number.isInteger(port)) exit('Bad port number');
 
   // parse txt string
   if (obj) {
@@ -179,7 +169,7 @@ function query(name, type) {
   if (!type) exit('Missing record type');
 
   // rrtype could be string (like TXT) or and int (like 16)
-  var rrtype = (0, _isInteger2.default)(parseInt(type, 10)) ? parseInt(type, 10) : type;
+  var rrtype = Number.isInteger(parseInt(type, 10)) ? parseInt(type, 10) : type;
   var getRecord = void 0;
 
   // wrap to check for validation errors
@@ -214,7 +204,7 @@ function address(hostname) {
 
   if (!getIPv4 && !getIPv6) exit('Invalid address type given: ' + IPv);
 
-  _promise2.default.all([getIPv4, getIPv6]).then(function (results) {
+  Promise.all([getIPv4, getIPv6]).then(function (results) {
     var IPv4 = results[0];
     var IPv6 = results[1];
 
