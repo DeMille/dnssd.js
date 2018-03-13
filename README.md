@@ -88,9 +88,9 @@ Stops the advertisement.
 Can do either a clean stop or a forced stop. A clean stop will send goodbye records out so others will know the service is going down. This takes ~1s. Forced goodbyes shut everything down immediately.
 
 #### <a name="advertisement-on"></a> .on(event, listener)
-`error`
-`stopped` when the advertisement is stopped
-`instanceRenamed` when the service instance has to be renamed
+`error`  
+`stopped` when the advertisement is stopped  
+`instanceRenamed` when the service instance has to be renamed  
 `hostRenamed` when the hostname has to be renamed
 
 #### <a name="advertisement-update-txt"></a> .updateTXT(txt)
@@ -135,9 +135,9 @@ Starts the browser.
 Stops the browser.
 
 #### <a name="browser-on"></a> .on(event, listener)
-`error`
-`serviceUp` when a new service is found
-`serviceChanged` when a service's data has changed
+`error`  
+`serviceUp` when a new service is found  
+`serviceChanged` when a service's data has changed  
 `serviceDown` when a service goes down
 
 #### <a name="browser-list"></a> .list()
@@ -253,18 +253,18 @@ dnssd.resolveService(name).then((service) => {
 ## Validations
 Service type names and TXT records have some restrictions:
 
-serviceNames:
-\* must start with an underscore _
-\* less than 16 chars including the leading _
-\* must start with a letter or digit
-\* only letters / digits / hyphens (but not consecutively: --)
+serviceNames:  
+\* must start with an underscore _  
+\* less than 16 chars including the leading _  
+\* must start with a letter or digit  
+\* only letters / digits / hyphens (but not consecutively: --)  
 
-TXT records
-\* Keys <= 9 chars
-\* Keys must be ascii and can't use '='
-\* Values must be a string, buffer, number, or boolean
-\* Each key/value pair must be < 255 bytes
-\* Total TXT object is < 1300 bytes
+TXT records  
+\* Keys <= 9 chars  
+\* Keys must be ascii and can't use '='  
+\* Values must be a string, buffer, number, or boolean  
+\* Each key/value pair must be < 255 bytes  
+\* Total TXT object is < 1300 bytes  
 
 <br/>
 
