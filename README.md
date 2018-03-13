@@ -1,6 +1,8 @@
 # dnssd.js
 #### Bonjour/Avahi-like service discovery in pure JavaScript
 
+[![Build Status](https://travis-ci.org/DeMille/dnssd.js.svg?branch=master)](https://travis-ci.org/DeMille/dnssd.js) [![Coverage Status](https://coveralls.io/repos/github/DeMille/dnssd.js/badge.svg?branch=master)](https://coveralls.io/github/DeMille/dnssd.js?branch=master)
+
 `dnssd` lets you find (and advertise) services on your network like chromecasts, printers, and airplay speakers.
 
 **Features**
