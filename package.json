@@ -1,0 +1,34 @@
+{
+  "name": "dnssd",
+  "version": "0.3.0",
+  "description": "Bonjour/Avahi-like service discovery in pure JavaScript",
+  "keywords": ["bonjour", "avahi", "mdns", "zeroconf"],
+  "author": "Sterling DeMille <sterlingdemille+npm@gmail.com>",
+  "license": "MIT",
+  "repository": "https://github.com/DeMille/dnssd.js",
+  "main": "index.js",
+  "devDependencies": {
+    "babel-runtime": "^6.11.6",
+    "babel-cli": "^6.16.0",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-register": "^6.16.3",
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.5",
+    "lodash": "^4.5.0",
+    "mocha": "^2.4.5",
+    "rewire": "^2.5.1",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0"
+  },
+  "scripts": {
+    "build": "babel ./src -d ./lib && babel ./bin/bin.js -o ./bin/bin.build.js",
+    "test": "mocha ./test/test_src.js",
+    "test:build": "npm run build && mocha --require babel-register ./test/test_lib.js",
+    "sanity": "mocha --require babel-register ./test/sanity.js",
+    "cover": "istanbul cover ./node_modules/mocha/bin/_mocha ./test/test_src.js"
+  },
+  "bin": {
+    "dnssd-js": "./bin/bin.js"
+  }
+}
