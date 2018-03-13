@@ -1,0 +1,8 @@
+deploy:
+  provider: npm
+  email: sterlingdemille+npm@gmail.com
+  api_key:
+    secure: CVLovCPUe7XDZVu/ppDerNmwrkiYpnQ1UxvSFS+2Q1MW6reHuOza8tzRQ6S3ErsFn6S/oeP/g3DFfAYePq873K7iI89gPZz5FlrzyFjcZqH6Oq6zL1ekZ61fdQpcn4vYoUnTmCVkAjSdepbqCoGXzzGrAbObIIReCUyjQYCQLEjjqCrGbrbXqF+yZg7lKC2mR4UGv9NIIH28VAcVZhhR7LRDaBxJVNA2YL1og2KCWxZ20qDnxiiXd54kaODZvOB7U6HseMBvqq9g3Igdlrz5ObW53GFxZ0wFDvGI7eMq2M5/TfzK+Z7XNcULfMA4aC3qFmBLzDlswqfH+WunOEEiFv89K+kGlDiAV8Fjmm1O9U//cQsUWCGxbF7ALRaKc5D3mozhl5lJP6v1UJKe9YRERKRLLecD53leTkR2YUuUgZA1IXxHJ0GrcfnmDDQeoLRIm6V8+G7yMJXulVq2uqk9kdiWZI6l4TsGz3J00hxEtab6CU4Z+FO0zNmXdmY7sr7l54266xx1239nSAdGbQ6mFQpJr9ZmHjDJd5B+nRZBCmQOUY1Y8tNgHBuzsQjiPFjhJQMUTqea2ekmOFg/wLTpj5tW8yQfj/Pg14WRWlXM5NMtfDP2+W5yqS6eLhfLd3By1iG9v7Hf2ZDe5VR+9TFfoYx6VTYAIjDrJu/6/h2C+MA=
+  on:
+    tags: true
+    repo: DeMille/dnssd.js
