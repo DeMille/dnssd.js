@@ -57,7 +57,7 @@ function Advertisement(type, port, options = {}) {
 
   this.serviceName  = serviceType.name;
   this.protocol     = serviceType.protocol;
-  this.subtypes     = serviceType.subtypes;
+  this.subtypes     = (options.subtypes) ? options.subtypes : serviceType.subtypes;
   this.port         = port;
   this.instanceName = options.name || misc.hostname();
   this.hostname     = options.host || misc.hostname();
