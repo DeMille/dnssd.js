@@ -49,12 +49,12 @@ describe('NetworkInterface', function() {
   NetworkInterface.__set__('os', osStub);
 
   beforeEach(function() {
-    NetworkInterface.__set__('activeInterface', null);
+    NetworkInterface.__set__('activeInterfaces', {});
   });
 
 
   describe('::get()', function() {
-    it('should make a new NetworkInterface', function() {
+    it('should make a new NetworkInterface for `any`', function() {
       const intf = NetworkInterface.get();
 
       expect(intf).to.be.instanceof(NetworkInterface);
@@ -65,6 +65,30 @@ describe('NetworkInterface', function() {
       const copy = NetworkInterface.get();
 
       expect(intf).to.equal(copy); // same object
+    });
+
+    it('should make a new NetworkInterface using a given multicast interface name', function() {
+      const intf = NetworkInterface.get('Ethernet');
+      const copy = NetworkInterface.get('Ethernet');
+
+      expect(intf).to.be.instanceof(NetworkInterface);
+      expect(intf).to.equal(copy); // same object
+    });
+
+    it('should make a new NetworkInterface using a given multicast IPv4 address', function() {
+      const intf = NetworkInterface.get('192.168.1.5');
+      const copy = NetworkInterface.get('192.168.1.5');
+
+      expect(intf).to.be.instanceof(NetworkInterface);
+      expect(intf).to.equal(copy); // same object
+    });
+
+    it('should throw with a decent error msg on bad input', function() {
+      const one = NetworkInterface.get.bind(null, 'bad input'); // unknown interface
+      const two = NetworkInterface.get.bind(null, '111.222.333.444'); // unknown address
+
+      expect(one).to.throw();
+      expect(two).to.throw();
     });
   });
 
@@ -184,6 +208,19 @@ describe('NetworkInterface', function() {
 
       intf._bindSocket().then(() => {
         expect(dgram.createSocket).to.have.been.calledWithMatch({type: 'udp4'});
+        done();
+      });
+
+      socket.emit('listening');
+    });
+
+    it('should `setMulticastInterface` if needed', function(done) {
+      const intf = new NetworkInterface('Ethernet', '169.254.100.175');
+
+      intf._bindSocket().then(() => {
+        expect(intf._sockets[0].setMulticastInterface)
+          .to.have.been.calledWith('169.254.100.175');
+
         done();
       });
 

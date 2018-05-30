@@ -31,10 +31,11 @@ const STATE = {STOPPED: 'stopped', STARTED: 'started'};
  * @param {Number}                          port - port to advertise
  *
  * @param {Object}   [options]
- * @param {Object}   options.name       - optional instance name
- * @param {Object}   options.host       - optional hostname to use
- * @param {Object}   options.txt        - optional TXT record
- * @param {Object}   options.subtypes   - optional subtypes to register
+ * @param {Object}   options.name       - instance name
+ * @param {Object}   options.host       - hostname to use
+ * @param {Object}   options.txt        - TXT record
+ * @param {Object}   options.subtypes   - subtypes to register
+ * @param {Object}   options.interface  - interface name or address to use
  */
 function Advertisement(type, port, options = {}) {
   if (!(this instanceof Advertisement)) {
@@ -73,7 +74,7 @@ function Advertisement(type, port, options = {}) {
   debug(`Creating new advertisement for "${this._id}" on ${port}`);
 
   this.state              = STATE.STOPPED;
-  this._interface         = NetworkInterface.get();
+  this._interface         = NetworkInterface.get(options.interface);
   this._defaultAddresses  = null;
   this._hostnameResponder = null;
   this._serviceResponder  = null;

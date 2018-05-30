@@ -48,7 +48,7 @@ function Browser(type, options = {}) {
   this._domain       = options.domain || 'local.';
   this._maintain     = ('maintain' in options) ? options.maintain : true;
   this._resolve      = ('resolve' in options) ? options.resolve : true;
-  this._interface    = NetworkInterface.get();
+  this._interface    = NetworkInterface.get(options.interface);
   this._state        = STATE.STOPPED;
 
   // emitter used to stop child queries instead of holding onto a reference

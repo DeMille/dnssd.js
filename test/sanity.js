@@ -1,3 +1,5 @@
+const os = require('os');
+
 const _ = require('lodash');
 
 const chai      = require('chai');
@@ -135,6 +137,28 @@ describe('Sanity tests:', function() {
             ad.updateTXT({key: 'value'});
             updated = true;
           });
+        }
+      })
+      .start();
+  });
+
+
+  it('advertisement / browser interface option should work', function(done) {
+    const name = Object.keys(os.networkInterfaces())[0];
+    const options = { name: 'Test #5', interface: name };
+
+    const ad = new Advertisement('_test._tcp', 4444, options).start();
+
+    const browser = new Browser(ServiceType.tcp('test'), options)
+      .on('serviceUp', (service) => {
+        if (service.name === ad.instanceName && service.port === ad.port) {
+          ad.stop();
+        }
+      })
+      .on('serviceDown', (service) => {
+        if (service.name === ad.instanceName && service.port === ad.port) {
+          browser.stop();
+          done();
         }
       })
       .start();

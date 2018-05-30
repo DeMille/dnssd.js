@@ -76,10 +76,11 @@ const ad = new dnssd.Advertisement(dnssd.tcp('http'), 4321);
 ad.start();
 ```
 
-`options.name`     - optional instance name  
-`options.host`     - optional hostname to use  
-`options.txt`      - optional TXT record  
-`options.subtypes` - optional subtypes to register
+`options.name`      - instance name  
+`options.host`      - hostname to use  
+`options.txt`       - TXT record  
+`options.subtypes`  - subtypes to register  
+`options.interface` - interface name or address to use ('eth0' or '1.2.3.4')
 
 #### <a name="advertisement-start"></a> .start()
 Starts the advertisement.  
@@ -129,6 +130,8 @@ Browser search is a multi-step process. First it finds an instance name, then it
 `options.maintain`: Set to false if don't want to maintain a service's info. This will give you a 'serviceUp' event but no 'serviceDown' or 'serviceUpdated'
 
 `options.resolve`: Set to false if you only want the instance name and nothing else.
+
+`options.interface`: Sets the interface to use ('eth0' or '1.2.3.4')
 
 #### <a name="browser-start"></a> .start()
 Starts the browser.

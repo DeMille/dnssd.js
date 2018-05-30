@@ -299,6 +299,8 @@ Probe.prototype._onProbe = function(packet) {
   // named 'A' and records named 'B', look at each set.  'A' records first,
   // and then 'B' records. Stops at the first conflict.
   const hasConflict = Object.keys(local).some((name) => {
+    if (!incoming[name]) return false;
+
     return this._recordsHaveConflict(local[name], incoming[name]);
   });
 

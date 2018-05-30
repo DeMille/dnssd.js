@@ -51,10 +51,18 @@ function isIPv4(ip) {
 }
 
 
+function findInterfaceName(address) {
+  const interfaces = os.networkInterfaces();
+
+  return Object.keys(interfaces).find(name =>
+    interfaces[name].some(addr => addr.address === address));
+}
+
+
 /**
- * Maps interface name to a previously created NetworkInterface obj
+ * Maps interface names to a previously created NetworkInterfaces
  */
-let activeInterface = null;
+let activeInterfaces = {};
 
 
 /**
@@ -64,11 +72,12 @@ let activeInterface = null;
  *
  * @param {string} name
  */
-function NetworkInterface(name) {
-  debug('Creating new NetworkInterface on %s', name);
-  EventEmitter.call(this);
-
+function NetworkInterface(name, address) {
   this._id = name || 'INADDR_ANY';
+  this._multicastAddr = address;
+
+  debug('Creating new NetworkInterface on `%s`', this._id);
+  EventEmitter.call(this);
 
   // socket binding
   this._usingMe = 0;
@@ -89,25 +98,55 @@ NetworkInterface.prototype.constructor = NetworkInterface;
 
 
 /**
- * Creates/returns NetworkInterfaces from a name or names of interfaces.
- * Active interfaces get reused so getEach either creates the interface or
- * returns the existing one.
+ * Creates/returns NetworkInterfaces from a name or address of interface.
+ * Active interfaces get reused.
  *
  * @static
  *
  * Ex:
- * > const interfaces = NetworkInterface.getEach('eth0');
- * > const interfaces = NetworkInterface.getEach(['eth0', 'wlan0']);
+ * > const interfaces = NetworkInterface.get('eth0');
+ * > const interfaces = NetworkInterface.get('111.222.333.444');
  *
- * @param  {string|string[]} args
- * @return {NetworkInterface[]}
+ * @param  {string} arg
+ * @return {NetworkInterface}
  */
-NetworkInterface.get = function get() {
-  if (!activeInterface) {
-    activeInterface = new NetworkInterface();
+NetworkInterface.get = function get(specific = '') {
+  // doesn't set a specific multicast send address
+  if (!specific) {
+    if (!activeInterfaces.any) {
+      activeInterfaces.any = new NetworkInterface();
+    }
+
+    return activeInterfaces.any;
   }
 
-  return activeInterface;
+  // sets multicast send address
+  let name;
+  let address;
+
+  // arg is an IP address
+  if (isIPv4(specific)) {
+    name = findInterfaceName(specific);
+    address = specific;
+  // arg is the name of an interface
+  } else {
+    if (!os.networkInterfaces()[specific]) {
+      throw new Error(`Can't find an interface named '${specific}'`);
+    }
+
+    name = specific;
+    address = os.networkInterfaces()[name].find(a => a.family === 'IPv4').address;
+  }
+
+  if (!name || !address) {
+    throw new Error(`Interface matching '${specific}' not found`);
+  }
+
+  if (!activeInterfaces[name]) {
+    activeInterfaces[name] = new NetworkInterface(name, address);
+  }
+
+  return activeInterfaces[name];
 };
 
 
@@ -189,12 +228,21 @@ NetworkInterface.prototype._bindSocket = function() {
       socket.setMulticastLoopback(true);
       socket.setTTL(255);
 
-      // add membership on each interface
-      const addresses = [].concat(...Object.values(os.networkInterfaces()));
+      // set a specific multicast interface to use for outgoing packets
+      if (this._multicastAddr) socket.setMulticastInterface(this._multicastAddr);
 
-      [...new Set(addresses)]
-        .filter(add => add.family === 'IPv4')
-        .forEach(add => socket.addMembership(MDNS_ADDRESS.IPv4, add.address));
+      // add membership on each unique IPv4 interface address
+      const addresses = [].concat(...Object.values(os.networkInterfaces()))
+        .filter(addr => addr.family === 'IPv4')
+        .map(addr => addr.address);
+
+      [...new Set(addresses)].forEach((address) => {
+        try {
+          socket.addMembership(MDNS_ADDRESS.IPv4, address);
+        } catch (e) {
+          console.log('OUCH! - could not add membership to interface ' + address, e);
+        }
+      });
 
       this._sockets.push(socket);
       resolve();
