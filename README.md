@@ -31,7 +31,7 @@ const ad = new dnssd.Advertisement(dnssd.tcp('http'), 4321);
 ad.start();
 
 // find all chromecasts
-const browser = dnssd.createBrowser(dnssd.tcp('googlecast'))
+const browser = dnssd.Browser(dnssd.tcp('googlecast'))
   .on('serviceUp', service => console.log("Device up: ", service))
   .on('serviceDown', service => console.log("Device down: ", service))
   .start();
@@ -103,7 +103,7 @@ Updates the advertisements TXT record
 
 ```js
 // find all chromecasts
-const browser = dnssd.createBrowser(dnssd.tcp('googlecast'))
+const browser = dnssd.Browser(dnssd.tcp('googlecast'))
   .on('serviceUp', service => console.log("Device up: ", service))
   .on('serviceDown', service => console.log("Device down: ", service))
   .start();
@@ -201,7 +201,7 @@ new ServiceType('_services._dns-sd._udp');
 ### <a name="all"></a> dnssd.all()
 ```js
 // browse all the things
-const browser = dnssd.createBrowser(dnssd.all())
+const browser = dnssd.Browser(dnssd.all())
 ```
 
 ### <a name="resolve"></a> dnssd.resolve(name, type [, options])
