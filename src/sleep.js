@@ -3,13 +3,14 @@
 // it's coming back from sleep.
 
 const EventEmitter = require('./EventEmitter');
+const timers = require('timers');
 
 const sleep = new EventEmitter();
 const frequency = 60 * 1000; // check for sleep once a minute
 const fudge = 5 * 1000;
 let last = Date.now();
 
-const interval = setInterval(function checkSleep() {
+const interval = timers.setInterval(function checkSleep() {
   const now = Date.now();
   const expected = last + frequency;
   last = now;
