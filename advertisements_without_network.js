@@ -1,19 +1,20 @@
-//docker run --init -it --network none -v $(pwd):/tmp --rm node bash -c "node /tmp/advertisements_without_network.js"
+// docker run --init -it --network none -v $(pwd):/tmp --rm node bash -c "node /tmp/advertisements_without_network.js"
 
-const dnssd = require('./');
+const dnssd = require('./')
 
-const ad = new dnssd.Advertisement(dnssd.tcp('http'), 4321);
-ad.on('error', (err) => {
-  console.log('err1')
-  console.log(err)
+const interfaces = require('os').networkInterfaces()
+Object.entries(interfaces).forEach(([name, addresses]) => {
+  console.log(name)
+  console.log(addresses)
+  if (addresses.filter(addressRecord => addressRecord.family === 'IPv4').length) {
+    const ad = new dnssd.Advertisement(dnssd.tcp('http'), 9999, {
+      interface: name
+    })
+    ad.on('error', err => {
+      console.log(err)
+    })
+    ad.start()
+  }
 })
-const ad2 = new dnssd.Advertisement(dnssd.tcp('http'), 4321);
-ad2.on('error', (err) => {
-  console.log('err2')
-  console.log(err)
-})
 
-ad.start();
-ad2.start();
-
-setInterval(() => console.log('yay'), 1000)
+// setInterval(() => console.log('yay'), 1000)
