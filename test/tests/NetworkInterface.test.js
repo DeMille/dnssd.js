@@ -604,6 +604,15 @@ describe('NetworkInterface', function() {
       intf._sockets = [socket];
       intf.stop();
     });
+
+    it.only('should remove interface from active interfaces cache', function() {
+      const intf = new NetworkInterface.get();
+
+      intf.stop();
+      const newIntf = new NetworkInterface.get();
+
+      expect(newIntf).to.not.equal(intf)
+    });
   });
 
 });

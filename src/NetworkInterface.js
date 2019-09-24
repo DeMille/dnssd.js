@@ -421,6 +421,15 @@ NetworkInterface.prototype.stop = function() {
   this._sockets = [];
   this._buffers = [];
 
+  const intf = this;
+
+  // Remove any entries from active interfaces.
+  Object.keys(activeInterfaces).forEach((name) => {
+    if (activeInterfaces[name] === intf) {
+      delete activeInterfaces[name];
+    }
+  });
+
   debug('Done.');
 };
 
