@@ -425,11 +425,13 @@ NetworkInterface.prototype.stop = function() {
 };
 
 
-NetworkInterface.prototype._onError = function(err) {
+NetworkInterface.prototype._onError = function (err) {
   debug(`${this._id} had an error: ${err}\n${err.stack}`);
 
+  if (this._usingMe > 0) {
+    this.emit('error', err);
+  }
   this.stop();
-  this.emit('error', err);
 };
 
 
