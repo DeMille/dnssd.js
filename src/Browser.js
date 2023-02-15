@@ -104,7 +104,7 @@ Browser.prototype.stop = function() {
 
   // because resolver.stop()'s will trigger serviceDown:
   this.removeAllListeners('serviceDown');
-  Object.values(this._resolvers).forEach(resolver => resolver.stop());
+  Object.values(this._resolvers).forEach(resolver => resolver && resolver.stop());
 
   this._state = STATE.STOPPED;
   this._resolvers = {};
